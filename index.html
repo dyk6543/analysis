@@ -59,7 +59,7 @@
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      background: rgba(50, 50, 60, 0.95);
+      background: white;
       box-shadow: 0 4px 16px rgba(0,0,0,0.4);
       display: flex;
       align-items: center;
@@ -70,10 +70,11 @@
       transform: translate(-50%, -50%);
       z-index: 2;
       border: 2px solid rgba(255,255,255,0.9);
+      padding: 15px;
     }
     .center-box img {
-      width: 64px;
-      height: 64px;
+      width: 100%;
+      height: 100%;
       object-fit: contain;
     }
     .flow-item {
@@ -288,7 +289,7 @@
       <div class="flow-container">
         <svg class="flow-svg" id="flowSvg"></svg>
         <div class="center-box">
-          <img src="https://logo.clearbit.com/apple.com" alt="Apple Logo">
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NzMiIGhlaWdodD0iNTczIiB2aWV3Qm94PSIwIDAgNDczIDU3MyI+PHBhdGggZmlsbD0iIzAwMDAwMCIgZD0iTTQxNS40IDQyOS40YzQuMiAxMy43IDkuNCAyNy4xIDEyLjUgNDAuOWgtMzMwYzAgMCAyNS00Mi43IDc1LTQyLjcgNTYuMyAwIDUzLjEgNDIuNyAxMTUgNDIuNyA2NS42IDAgODMuNC00Mi43IDEyNy41LTQyLjd2MS44ek00MTUuNCA0MjkuNHoiLz48cGF0aCBmaWxsPSIjMDAwMDAwIiBkPSJNNDE1LjQgNDI5LjRjNC4yIDEzLjcgOS40IDI3LjEgMTIuNSA0MC45aC0zMzBjMCAwIDI1LTQyLjcgNzUtNDIuNyA1Ni4zIDAgNTMuMSA0Mi43IDExNSA0Mi43IDY1LjYgMCA4My40LTQyLjcgMTI3LjUtNDIuN3YxLjh6TTQxNS40IDQyOS40eiIvPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Ik0zOTMuMiAyNzIuMmMwIDEwMi43LTgzLjMgMTg2LTE4NiAxODZzLTE4Ni04My4zLTE4Ni0xODZjMC0xMDIuNyA4My4zLTE4NiAxODYtMTg2IDE5LjQgMCAzOC4xIDMgNTUuOCA4LjQgMjcuOC04LjQgNTcuMi0xMy4xIDg3LjctMTMuMSAyOS41IDAgNTguMSA0LjMgODUuMiAxMi4zIDE3LjctNS4zIDM2LjQtOC4yIDU1LjgtOC4yIDEwMi43IDAgMTg2IDgzLjMgMTg2IDE4NiAwIDU1LjctMjQuNSAxMDUuNy02My4zIDE0MC0yNS4xLTIzLjgtNTguOS0zOC41LTk2LjItMzguNS02Mi42IDAtMTE1LjcgNDEuMy0xMzMuNSA5OC4xLTI1LjgtOC45LTUzLjctMTMuNy04Mi42LTEzLjctMjguOSAwLTU2LjggNC44LTgyLjYgMTMuNy0xNy44LTU2LjgtNzAuOS05OC4xLTEzMy41LTk4LjEtMzcuMyAwLTcxLjEgMTQuNy05Ni4yIDM4LjUtMzguOC0zNC4zLTYzLjMtODQuMy02My4zLTE0MCAwLTEwMi43IDgzLjMtMTg2IDE4Ni0xODZ6Ii8+PC9zdmc+" alt="Apple Logo">
         </div>
       </div>
       <div class="analysis-point">
@@ -420,10 +421,17 @@
     function initialize() {
       const svg = document.getElementById('flowSvg');
       svg.innerHTML = '';
+      
+      // Set SVG viewport size
+      svg.setAttribute('viewBox', '0 0 1000 600');
+      svg.style.width = '100%';
+      svg.style.height = '100%';
+      
       const flowContainer = document.querySelector('.flow-container');
       flowContainer.querySelectorAll('.flow-item').forEach(el => el.remove());
-      const centerX = svg.clientWidth / 2;
-      const centerY = svg.clientHeight / 2;
+      
+      const centerX = 500; // middle of viewBox
+      const centerY = 300; // middle of viewBox
       const spacing = 70;
 
       const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
@@ -484,8 +492,13 @@
       flowContainer.appendChild(div);
     }
 
-    window.addEventListener('load', initialize);
-    window.addEventListener('resize', initialize);
+    // Call initialize immediately and on window resize
+    initialize();
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(initialize, 100);
+    });
   </script>
 </body>
 </html>
